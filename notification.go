@@ -16,7 +16,8 @@ type Notification struct {
 	PaymentID      uint64            `json:"PaymentId"`   // Уникальный идентификатор платежа. В случае нотификаций банк присылает число, а не строку, как в случае с Init или Cancel
 	ErrorCode      string            `json:"ErrorCode"`   // Код ошибки, если произошла ошибка
 	Amount         uint64            `json:"Amount"`      // Текущая сумма транзакции в копейках
-	RebillID       string            `json:"RebillId"`    // Идентификатор рекуррентного платежа
+	RebillIDUint   uint64            `json:"RebillId"`    // Идентификатор рекуррентного платежа
+	RebillID       string            `json:"-"`           // Идентификатор рекуррентного платежа
 	CardID         uint64            `json:"CardId"`      // Идентификатор привязанной карты
 	PAN            string            `json:"Pan"`         // Маскированный номер карты
 	DataStr        string            `json:"DATA"`
@@ -83,6 +84,8 @@ func (c *Client) ParseNotification(requestBody io.Reader) (*Notification, error)
 			return nil, errors.New("can't unserialize DATA field: " + err.Error())
 		}
 	}
+
+	notification.RebillID = strconv.FormatUint(notification.RebillIDUint, 10)
 
 	return &notification, nil
 }
