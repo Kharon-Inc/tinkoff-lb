@@ -47,8 +47,8 @@ func (n *Notification) GetValuesForToken() map[string]string {
 		result["DATA"] = n.DataStr
 	}
 
-	if n.RebillID != "" {
-		result["RebillId"] = n.RebillID
+	if n.RebillIDUint != 0 {
+		result["RebillId"] = strconv.FormatUint(n.RebillIDUint, 10)
 	}
 
 	return result
